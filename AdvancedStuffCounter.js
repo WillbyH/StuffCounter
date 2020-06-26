@@ -14,6 +14,8 @@ var right = 1;
 var top = 1;
 var bottom = 1;
 
+var activeSurfaces = [];
+
 var surfaceStyles = {
   "0": "Grass",
   "1": "Sand",
@@ -38,6 +40,15 @@ var surfaceStyles = {
   "20": "20",
 }
 
+function ArrayIncludes(array, key) {
+  for (var k in array) {
+    if (array[k] == key) {
+      return true
+    }
+  }
+  return false
+}
+
 function selectTheMap() { // Display Selection
     var left = Math.min(downCoord.x, currentCoord.x);
     var right = Math.max(downCoord.x, currentCoord.x);
@@ -60,6 +71,7 @@ function finishSelection() { // Modify tiles in the selected area once the mouse
 }
 
 function count_stuff() {
+  activeSurfaces = [];
   counts = {};
   if (selected_area) {
     for (var x = left; x <= right; x++) {
@@ -144,6 +156,9 @@ function count_stuff() {
   for (var key in counts) {
     stuff = stuff + counts[key][1];
   }
+  for (var surface in activeSurfaces) {
+    stuff = stuff - counts[activeSurfaces[surface]][1];
+  }
   if (selected_area) {
     counts["PSTUFF"] = ["Player Stuff (Total)", stuff];
   } else {
@@ -216,6 +231,11 @@ function count_elements_tile(tile) {
           counts[identifier][1]++;
         } else {
           counts[identifier] = [name, 1];
+          if (ArrayIncludes(["SUR0","SUR1","SUR2","SUR3","SUR4","SUR5","SUR6","SUR7","SUR8","SUR9","SUR10","SUR11","SUR12","SUR13","SUR14","SUR15","SUR16","SUR17","SUR18","SUR19","SUR20"], identifier)) { // Filter out everything but surfaces
+            if (!(ArrayIncludes(activeSurfaces, identifier))) { // Make sure the surface is not already in the list
+              activeSurfaces.push(identifier);
+            }
+          }
         }
       }
     }
@@ -227,7 +247,7 @@ function sc_window() {
   window = ui.openWindow({
       classification: 'park',
       title: "Advanced Stuff Counter",
-      width: 300,
+      width: 320,
       height: 320,
       x: 20,
       y: 50,
@@ -245,16 +265,16 @@ function sc_window() {
           name: 'stuff-list',
           x: 3,
           y: 40,
-          width: 296,
+          width: 316,
           height: 250,
           showColumnHeaders: true,
           scrollbars: "vertical",
-          columns: [{header: "count", ratioWidth: 1, canSort: true},{header: "name", ratioWidth: 4, canSort: true},{header: "identifier", ratioWidth: 1.5, canSort: true}],
+          columns: [{header: "count", ratioWidth: 1, canSort: true},{header: "name", ratioWidth: 4.5, canSort: true},{header: "identifier", ratioWidth: 2, canSort: true}],
           items: items
       },{
           type: 'button',
           name: "select-area-button",
-          x: 10,
+          x: 45,
           y: 297,
           width: 110,
           height: 15,
@@ -265,7 +285,7 @@ function sc_window() {
       },{
           type: 'button',
           name: "deselect-area-button",
-          x: 120,
+          x: 155,
           y: 297,
           width: 110,
           height: 15,
@@ -325,7 +345,6 @@ function start_select_tool() {
 }
 
 function main() {
-  count_stuff()
   ui.registerMenuItem("Advanced Stuff Counter", function() {
     sc_window()
   });
@@ -333,9 +352,11 @@ function main() {
 
 registerPlugin({
     name: 'Advanced Stuff Counter',
-    version: '1.0',
+    version: '1.1',
     licence: 'MIT',
     authors: ['Willby'],
     type: 'local',
     main: main
 });
+
+// Update 1.1 - Removed Surfaces from the Player Stuff (total)
