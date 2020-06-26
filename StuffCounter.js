@@ -14,6 +14,10 @@ var right = 1;
 var top = 1;
 var bottom = 1;
 
+var activeSurfaces = [];
+
+var surfaceNames = [];
+
 var surfaceStyles = {
   "0": "Grass",
   "1": "Sand",
@@ -38,6 +42,19 @@ var surfaceStyles = {
   "20": "20",
 }
 
+for (var num in surfaceStyles) {
+  surfaceNames.push("Surface (" + surfaceStyles[num] + ")")
+}
+
+function ArrayIncludes(array, key) {
+  for (var k in array) {
+    if (array[k] == key) {
+      return true
+    }
+  }
+  return false
+}
+
 function selectTheMap() { // Display Selection
     var left = Math.min(downCoord.x, currentCoord.x);
     var right = Math.max(downCoord.x, currentCoord.x);
@@ -60,6 +77,7 @@ function finishSelection() { // Modify tiles in the selected area once the mouse
 }
 
 function count_stuff() {
+  activeSurfaces = [];
   counts = {};
   if (selected_area) {
     for (var x = left; x <= right; x++) {
@@ -137,6 +155,9 @@ function count_stuff() {
   for (var key in counts) {
     stuff = stuff + counts[key];
   }
+  for (var surface in activeSurfaces) {
+    stuff = stuff - counts[activeSurfaces[surface]];
+  }
   if (selected_area) {
     counts["Player Stuff (Total)"] = stuff;
   } else {
@@ -201,6 +222,11 @@ function count_elements_tile(tile) {
         counts[name]++;
       } else {
         counts[name] = 1;
+        if (ArrayIncludes(surfaceNames, name)) { // Filter out everything but surfaces
+          if (!(ArrayIncludes(activeSurfaces, name))) { // Make sure the surface is not already in the list
+            activeSurfaces.push(name);
+          }
+        }
       }
     }
   }
@@ -210,7 +236,7 @@ function sc_window() {
   count_stuff()
   window = ui.openWindow({
       classification: 'park',
-      title: "Stuff Counter",
+      title: "Stuff Counter One",
       width: 240,
       height: 320,
       x: 20,
@@ -317,9 +343,11 @@ function main() {
 
 registerPlugin({
     name: 'Stuff Counter',
-    version: '1.0',
+    version: '1.1',
     licence: 'MIT',
     authors: ['Willby'],
     type: 'local',
     main: main
 });
+
+// Update 1.1 - Removed Surfaces from the Player Stuff (total)
