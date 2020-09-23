@@ -14,6 +14,6 @@ You can also select a specific area of your park and view what is in that area. 
 *Player Stuff does not include: guests, tiles, surfaces and ducks.*
 
 ### What is AdvancedStuffCounter.js?
-Advanced Stuff Counter will also include the identifier, I do not recommend using this version of the plugin. It does not help much.
+Advanced Stuff Counter will also include the identifier, I do not recommend using this version of the plugin. That is unless you have a heap of custom scenery. I have heard it is helpful then.
 
 ![Ingame Window](http://file.willby.info/advancedstuffcounter.png)
