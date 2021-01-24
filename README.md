@@ -4,7 +4,7 @@ Get a list of everything in your park with the amount.
 ### Put the StuffCounter.js file in your plugins folder.
 *You could use AdvancedStuffCounter too, read below for more information*
 
-This plugin will give you a list of all tracks, scenary, tiles, peeps, cars, and of course ducks in a list with the amount of that thing listed next to it. You may sort these by the amount or by the name of the thing.
+This plugin will give you a list of all tracks, scenery, tiles, peeps, cars, and of course ducks in a list with the amount of that thing listed next to it. You may sort these by the amount or by the name of the thing.
 
 ![Ingame Window](http://file.willby.info/stuffcounter.png)
 
